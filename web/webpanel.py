@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request
-import os
 import subprocess
+import os
 
 app = Flask(__name__)
 
 PUBLIC_PASSWORD = "CoreLab$123"
-
-TOKEN_FILE = "token.txt"
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -25,14 +23,16 @@ def panel():
         else:
             if token:
 
-                # Save token from panel
-                with open(TOKEN_FILE, "w") as f:
-                    f.write(token)
+                # Restart bot with token environment variable
+                env = os.environ.copy()
+                env["DISCORD_TOKEN"] = token
 
-                # Restart bot
-                subprocess.Popen(["python", "bot/bot.py"])
+                subprocess.Popen(
+                    ["python", "bot/bot.py"],
+                    env=env
+                )
 
-                message = "Bot Restarted Successfully"
+                message = "Bot Started Successfully"
 
     return render_template("index.html", message=message)
 
