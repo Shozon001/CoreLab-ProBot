@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request
 import subprocess
 import os
-import signal
 
 app = Flask(__name__)
 
-PUBLIC_PASSWORD = "CoreLab$123"
+PASSWORD = "CoreLab$123"
 
 bot_process = None
 
@@ -23,23 +22,14 @@ def panel():
         token = request.form.get("token")
         action = request.form.get("action")
 
-        if password != PUBLIC_PASSWORD:
+        if password != PASSWORD:
             message = "Invalid Password"
             return render_template("index.html", message=message)
 
-        # Stop Bot
-        if action == "stop":
-
-            if bot_process:
-                bot_process.terminate()
-                bot_process = None
-
-            message = "Bot Stopped"
-
-        # Start Bot
-        elif action == "start":
+        if action == "start":
 
             if token:
+
                 env = os.environ.copy()
                 env["DISCORD_TOKEN"] = token
 
@@ -49,6 +39,14 @@ def panel():
                 )
 
                 message = "Bot Started"
+
+        elif action == "stop":
+
+            if bot_process:
+                bot_process.terminate()
+                bot_process = None
+
+                message = "Bot Stopped"
 
     return render_template("index.html", message=message)
 

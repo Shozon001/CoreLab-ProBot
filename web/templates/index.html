@@ -2,39 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>CoreLab Bot Panel</title>
+<title>CoreLab Pro Panel</title>
 
 <style>
+
 body{
-    font-family: Arial;
-    background:#0f172a;
+    background:#020617;
     color:white;
-    text-align:center;
-    margin-top:60px;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
 }
 
-.panel{
-    background:#1e293b;
-    width:400px;
-    margin:auto;
-    padding:30px;
-    border-radius:15px;
+.card{
+    background:#0f172a;
+    padding:40px;
+    border-radius:18px;
+    width:420px;
+    text-align:center;
+    box-shadow:0 0 25px rgba(0,0,0,0.6);
 }
 
 input{
     width:90%;
-    padding:10px;
-    margin:10px;
-    border-radius:8px;
+    padding:12px;
+    margin:10px 0;
     border:none;
+    border-radius:10px;
 }
 
 button{
-    padding:12px 25px;
+    padding:13px 30px;
     border:none;
-    border-radius:8px;
-    cursor:pointer;
+    border-radius:10px;
     font-weight:bold;
+    margin:8px;
+    cursor:pointer;
 }
 
 .start{
@@ -47,29 +52,35 @@ button{
     color:white;
 }
 
-.footer{
-    margin-top:30px;
-    opacity:0.8;
+footer{
+    margin-top:25px;
+    opacity:0.7;
+    font-size:14px;
 }
+
 </style>
 
 </head>
 
 <body>
 
-<h2>CoreLab Discord Bot Panel</h2>
+<div class="card">
 
-<div class="panel">
+<h2>🤖 CoreLab Pro Bot Panel</h2>
 
 <form method="POST">
-<input name="password" type="password" placeholder="Password"><br>
-<input name="token" type="text" placeholder="Discord Token"><br>
 
-<button class="start" name="action" value="start" type="submit">
+<input name="password" type="password" placeholder="Panel Password">
+
+<input name="token" type="text" placeholder="Discord Bot Token">
+
+<br>
+
+<button name="action" value="start" class="start" type="submit">
 Start Bot
 </button>
 
-<button class="stop" name="action" value="stop" type="submit">
+<button name="action" value="stop" class="stop" type="submit">
 Stop Bot
 </button>
 
@@ -77,12 +88,12 @@ Stop Bot
 
 <p>{{ message }}</p>
 
-</div>
-
-<div class="footer">
+<footer>
 <p>MD Shozon Ahamed Shehab</p>
 <p>Official Bot Developer</p>
 <p>©2026 CoreLab</p>
+</footer>
+
 </div>
 
 </body>
