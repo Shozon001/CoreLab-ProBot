@@ -1,0 +1,5 @@
+__pycache__/
+.env
+*.enc
+secret.key
+token.txt
