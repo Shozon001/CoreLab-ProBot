@@ -1,26 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>CoreLab Panel</title>
+<meta charset="UTF-8">
+<title>CoreLab Bot Panel</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    margin-top:60px;
+}
+
+.panel{
+    background:#1e293b;
+    width:400px;
+    margin:auto;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0px 0px 15px rgba(0,0,0,0.5);
+}
+
+input{
+    width:90%;
+    padding:10px;
+    margin:10px;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    background:#22c55e;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.footer{
+    margin-top:30px;
+    opacity:0.8;
+}
+</style>
+
 </head>
 
-<body style="text-align:center;margin-top:100px;font-family:Arial">
+<body>
 
-<h2>BOT Control Panel</h2>
-<h3>Developer: MD Shozon Ahamed Shehab</h3>
+<h2>CoreLab Discord Bot Panel</h2>
+
+<div class="panel">
+
 <form method="POST">
 
-Password<br>
-<input name="password" type="password"><br><br>
+<input name="password" type="password" placeholder="Password"><br>
 
-Token<br>
-<input name="token" type="text" size="50"><br><br>
+<input name="token" type="text" placeholder="Discord Token"><br>
 
-<button type="submit">Submit</button>
+<button type="submit">Update Bot</button>
 
 </form>
 
 <p>{{ message }}</p>
+
+</div>
+
+<div class="footer">
+
+<p>MD Shozon Ahamed Shehab</p>
+<p>Official Bot Developer</p>
+<p>©2026 CoreLab</p>
+
+</div>
 
 </body>
 </html>
