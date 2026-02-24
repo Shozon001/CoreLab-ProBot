@@ -3,14 +3,23 @@ from discord.ext import commands
 import aiohttp
 import re
 import json
-import os
 
-# Load Token
-TOKEN = os.getenv("DISCORD_TOKEN")
+# ==========================
+# Config
+# ==========================
+
+TOKEN_FILE = "token.txt"
 
 API_BASE = "https://api.ip2location.io/?key=2BA7BD8AEF5682B12FD4B98CC3F19D4F&ip="
 
 DEVELOPER_NAME = "MD Shozon Ahamed Shehab"
+
+# Load token from file
+try:
+    with open(TOKEN_FILE, "r") as f:
+        TOKEN = f.read().strip()
+except:
+    TOKEN = None
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -18,15 +27,21 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 
-# IP Validation
+# ==========================
+# Utilities
+# ==========================
+
 def is_valid_ip(ip):
     return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", ip)
 
 
+# ==========================
 # Bot Ready Event
+# ==========================
+
 @bot.event
 async def on_ready():
-    print("Bot Online:", bot.user)
+    print(f"Bot Online: {bot.user}")
 
     await bot.change_presence(
         activity=discord.Game(name=f"Developed by {DEVELOPER_NAME}")
@@ -36,6 +51,7 @@ async def on_ready():
 # ==========================
 # IP Lookup Command
 # ==========================
+
 @bot.command()
 async def ip(ctx, ip_address: str):
 
@@ -46,11 +62,15 @@ async def ip(ctx, ip_address: str):
     url = API_BASE + ip_address
 
     async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            data = json.loads(await response.text())
+        try:
+            async with session.get(url, timeout=10) as response:
+                data = await response.json()
+        except:
+            await ctx.send("⚠️ API Request Failed")
+            return
 
     if "country_name" not in data:
-        await ctx.send("❌ API Error")
+        await ctx.send("❌ API Response Error")
         return
 
     embed = discord.Embed(
@@ -81,6 +101,7 @@ async def ip(ctx, ip_address: str):
 # ==========================
 # Developer Command
 # ==========================
+
 @bot.command(name="dev")
 async def dev(ctx):
 
@@ -92,7 +113,7 @@ async def dev(ctx):
     embed.add_field(name="Name", value="MD Shozon Ahamed Shehab", inline=False)
     embed.add_field(name="Age", value="20+", inline=True)
     embed.add_field(name="Nationality", value="Bangladeshi", inline=True)
-    embed.add_field(name="Relationship", value=" Single 💔", inline=False)
+    embed.add_field(name="Relationship", value="Single 🩷", inline=False)
     embed.add_field(name="Phone", value="+8809658225161", inline=False)
     embed.add_field(name="Discord Profile", value="https://discord.com/users/825450245005639702", inline=False)
     embed.add_field(name="Discord Server", value="https://discord.gg/E99grsqtGm", inline=False)
@@ -102,8 +123,11 @@ async def dev(ctx):
     await ctx.send(embed=embed)
 
 
+# ==========================
 # Run Bot
+# ==========================
+
 if TOKEN:
     bot.run(TOKEN)
 else:
-    print("DISCORD_TOKEN environment variable not found")
+    print("Token not found in token.txt")

@@ -1,25 +1,43 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import os
 import subprocess
 
 app = Flask(__name__)
 
-TOKEN = os.getenv("DISCORD_TOKEN")
+PUBLIC_PASSWORD = "CoreLab$123"
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+TOKEN_FILE = "token.txt"
 
 
-def start_bot():
-    if TOKEN:
-        subprocess.Popen(["python", "bot/bot.py"])
+@app.route("/", methods=["GET", "POST"])
+def panel():
+
+    message = ""
+
+    if request.method == "POST":
+
+        password = request.form.get("password")
+        token = request.form.get("token")
+
+        if password != PUBLIC_PASSWORD:
+            message = "Invalid Password"
+
+        else:
+            if token:
+
+                # Save token from panel
+                with open(TOKEN_FILE, "w") as f:
+                    f.write(token)
+
+                # Restart bot
+                subprocess.Popen(["python", "bot/bot.py"])
+
+                message = "Bot Restarted Successfully"
+
+    return render_template("index.html", message=message)
 
 
 if __name__ == "__main__":
-
-    # Start bot process
-    start_bot()
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
