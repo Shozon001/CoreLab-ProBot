@@ -3,6 +3,7 @@ from discord.ext import commands
 import aiohttp
 import re
 import json
+import os
 
 # ==========================
 # Config
@@ -14,18 +15,37 @@ API_BASE = "https://api.ip2location.io/?key=2BA7BD8AEF5682B12FD4B98CC3F19D4F&ip=
 
 DEVELOPER_NAME = "MD Shozon Ahamed Shehab"
 
-# Load token from file
+# Load token
 try:
     with open(TOKEN_FILE, "r") as f:
         TOKEN = f.read().strip()
 except:
     TOKEN = None
 
+# ==========================
+# Discord Setup
+# ==========================
+
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+# ==========================
+# Duplicate Process Protection
+# ==========================
+
+import psutil
+
+current_pid = os.getpid()
+
+for process in psutil.process_iter():
+    try:
+        if "python" in process.name().lower():
+            if process.pid != current_pid:
+                process.kill()
+    except:
+        pass
 
 # ==========================
 # Utilities
@@ -34,9 +54,8 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 def is_valid_ip(ip):
     return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", ip)
 
-
 # ==========================
-# Bot Ready Event
+# Ready Event
 # ==========================
 
 @bot.event
@@ -46,7 +65,6 @@ async def on_ready():
     await bot.change_presence(
         activity=discord.Game(name=f"Developed by {DEVELOPER_NAME}")
     )
-
 
 # ==========================
 # IP Lookup Command
@@ -97,7 +115,6 @@ async def ip(ctx, ip_address: str):
 
     await ctx.send(embed=embed)
 
-
 # ==========================
 # Developer Command
 # ==========================
@@ -113,15 +130,14 @@ async def dev(ctx):
     embed.add_field(name="Name", value="MD Shozon Ahamed Shehab", inline=False)
     embed.add_field(name="Age", value="20+", inline=True)
     embed.add_field(name="Nationality", value="Bangladeshi", inline=True)
-    embed.add_field(name="Relationship", value="Single 🩷", inline=False)
+    embed.add_field(name="Relationship", value="In a relationship with Petni 🩷", inline=False)
     embed.add_field(name="Phone", value="+8809658225161", inline=False)
     embed.add_field(name="Discord Profile", value="https://discord.com/users/825450245005639702", inline=False)
-    embed.add_field(name="Discord Server", value="https://discord.gg/E99grsqtGm", inline=False)
+    embed.add_field(name="Discord Server", value="https://discord.gg/E99krsqtGm", inline=False)
 
     embed.set_footer(text="Official Bot Developer")
 
     await ctx.send(embed=embed)
-
 
 # ==========================
 # Run Bot
@@ -130,4 +146,4 @@ async def dev(ctx):
 if TOKEN:
     bot.run(TOKEN)
 else:
-    print("Token not found in token.txt")
+    print("Token not found")
