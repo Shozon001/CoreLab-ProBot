@@ -19,7 +19,6 @@ body{
     margin:auto;
     padding:30px;
     border-radius:15px;
-    box-shadow:0px 0px 15px rgba(0,0,0,0.5);
 }
 
 input{
@@ -34,10 +33,18 @@ button{
     padding:12px 25px;
     border:none;
     border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.start{
     background:#22c55e;
     color:white;
-    font-weight:bold;
-    cursor:pointer;
+}
+
+.stop{
+    background:#ef4444;
+    color:white;
 }
 
 .footer{
@@ -55,12 +62,16 @@ button{
 <div class="panel">
 
 <form method="POST">
-
 <input name="password" type="password" placeholder="Password"><br>
-
 <input name="token" type="text" placeholder="Discord Token"><br>
 
-<button type="submit">Update Bot</button>
+<button class="start" name="action" value="start" type="submit">
+Start Bot
+</button>
+
+<button class="stop" name="action" value="stop" type="submit">
+Stop Bot
+</button>
 
 </form>
 
@@ -69,11 +80,9 @@ button{
 </div>
 
 <div class="footer">
-
 <p>MD Shozon Ahamed Shehab</p>
 <p>Official Bot Developer</p>
 <p>©2026 CoreLab</p>
-
 </div>
 
 </body>

@@ -1,14 +1,19 @@
 from flask import Flask, render_template, request
 import subprocess
 import os
+import signal
 
 app = Flask(__name__)
 
 PUBLIC_PASSWORD = "CoreLab$123"
 
+bot_process = None
+
 
 @app.route("/", methods=["GET", "POST"])
 def panel():
+
+    global bot_process
 
     message = ""
 
@@ -16,23 +21,34 @@ def panel():
 
         password = request.form.get("password")
         token = request.form.get("token")
+        action = request.form.get("action")
 
         if password != PUBLIC_PASSWORD:
             message = "Invalid Password"
+            return render_template("index.html", message=message)
 
-        else:
+        # Stop Bot
+        if action == "stop":
+
+            if bot_process:
+                bot_process.terminate()
+                bot_process = None
+
+            message = "Bot Stopped"
+
+        # Start Bot
+        elif action == "start":
+
             if token:
-
-                # Restart bot with token environment variable
                 env = os.environ.copy()
                 env["DISCORD_TOKEN"] = token
 
-                subprocess.Popen(
+                bot_process = subprocess.Popen(
                     ["python", "bot/bot.py"],
                     env=env
                 )
 
-                message = "Bot Started Successfully"
+                message = "Bot Started"
 
     return render_template("index.html", message=message)
 
